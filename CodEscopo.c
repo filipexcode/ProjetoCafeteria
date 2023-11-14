@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +7,7 @@
 #define MAX_PRODUTOS 50
 #define MAX_PEDIDOS 100
 #define MAX_MUSICAS 50
+#define MAX_SERVICOS 50
 
 typedef struct {
     char nome[100];
@@ -34,15 +36,23 @@ typedef struct {
     char artista[50];
 } Musica;
 
+typedef struct {
+    int id;
+    char tipo[50];
+    float valor;
+} Servico;
+
 Cliente clientes[MAX_CLIENTES];
 Produto produtos[MAX_PRODUTOS];
 Pedido pedidos[MAX_PEDIDOS];
 Musica musicas[MAX_MUSICAS];
+Servico servicos[MAX_SERVICOS];
 
 int numClientes = 0;
 int numProdutos = 0;
 int numPedidos = 0;
 int numMusicas = 0;
+int numServicos = 0;
 
 // Funções de cadastro
 int verificarClienteExistente(char nome[]) {
@@ -138,11 +148,124 @@ void realizarPedido(int cliente_id) {
 }
 
 void cadastrarPrestadorServico() {
-    // Implemente a lógica para cadastrar prestadores de serviços
-    // ...
+	system("cls");
+	
+     printf("Cadastro de Prestador de Serviço:\n");
+    printf("Tipo de Serviço: ");
+    scanf("%s", servicos[numServicos].tipo);
+    printf("Valor: ");
+    scanf("%f", &servicos[numServicos].valor);
+    servicos[numServicos].id = numServicos + 1;
+    numServicos++;
+    printf("Prestador de Serviço cadastrado com sucesso!\n");
 }
 
-// ... outras funções conforme necessário
+void listarPrestadoresServicoTipo() {
+	system("cls");
+	
+	int i;
+	
+    char tipo[50];
+    printf("Informe o tipo de serviço para listar os prestadores: ");
+    scanf("%s", tipo);
+
+    int prestadoresEncontrados = 0;
+
+    for (i = 0; i < numServicos; i++) {
+        if (strcmp(servicos[i].tipo, tipo) == 0) {
+            if (prestadoresEncontrados == 0) {
+                printf("\nPrestadores de Serviço do Tipo %s:\n", tipo);
+                printf("%-5s %-20s %-10s\n", "ID", "Tipo de Serviço", "Valor");
+                printf("---------------------------------------\n");
+            }
+            printf("%-5d %-20s %-10.2f\n", servicos[i].id, servicos[i].tipo, servicos[i].valor);
+            prestadoresEncontrados++;
+        }
+    }
+
+    if (prestadoresEncontrados == 0) {
+        printf("Nenhum prestador de serviço encontrado do tipo %s.\n", tipo);
+    }
+}
+
+void listarTodosPrestadoresServico() {
+	system("cls");
+	
+	int i;
+	
+    if (numServicos == 0) {
+        printf("Nenhum prestador de serviço cadastrado.\n");
+        return;
+    }
+
+    printf("\nLista de Todos os Prestadores de Serviço:\n");
+    printf("%-5s %-20s %-10s\n", "ID", "Tipo de Serviço", "Valor");
+    printf("---------------------------------------\n");
+
+    for (i = 0; i < numServicos; i++) {
+        printf("%-5d %-20s %-10.2f\n", servicos[i].id, servicos[i].tipo, servicos[i].valor);
+    }
+}
+
+void listarServicosOrdemCrescenteValor() {
+	int i,j;
+	
+    if (numServicos == 0) {
+        printf("Nenhum serviço cadastrado.\n");
+        return;
+    }
+
+    // Ordenação por bubble sort
+    for (i = 0; i < numServicos - 1; i++) {
+        for (j = 0; j < numServicos - i - 1; j++) {
+            if (servicos[j].valor > servicos[j + 1].valor) {
+                // Troca os elementos se estiverem fora de ordem
+                Servico temp = servicos[j];
+                servicos[j] = servicos[j + 1];
+                servicos[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nLista de Serviços em Ordem Crescente de Valor:\n");
+    printf("%-5s %-20s %-10s\n", "ID", "Tipo de Serviço", "Valor");
+    printf("---------------------------------------\n");
+
+    for (i = 0; i < numServicos; i++) {
+        printf("%-5d %-20s %-10.2f\n", servicos[i].id, servicos[i].tipo, servicos[i].valor);
+    }
+}
+
+void listarClientesOrdemCrescenteNome() {
+	system("cls");
+	
+	int i,j;
+	
+    if (numClientes == 0) {
+        printf("Nenhum cliente cadastrado.\n");
+        return;
+    }
+
+    // Ordenação por bubble sort
+    for (i = 0; i < numClientes - 1; i++) {
+        for (j = 0; j < numClientes - i - 1; j++) {
+            if (strcmp(clientes[j].nome, clientes[j + 1].nome) > 0) {
+                // Troca os elementos se estiverem fora de ordem
+                Cliente temp = clientes[j];
+                clientes[j] = clientes[j + 1];
+                clientes[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nLista de Clientes em Ordem Crescente de Nome:\n");
+    printf("------------------------------------------------------------\n");
+
+    for (i = 0; i < numClientes; i++) {
+        printf("%-20s\n", clientes[i].nome);
+    }
+}
+
 
 int main() {
     int opcao;
@@ -152,7 +275,12 @@ int main() {
         printf("1. Fazer Pedido\n");
         printf("2. Cadastrar Cliente\n");
         printf("3. Cadastrar Prestador de Serviço\n");
-        printf("4. Listar os clientes de um determinado estado\n");
+        printf("4. Listar os Clientes de um Determinado Estado\n");
+        printf("5. Listar os Prestadores de Serviço de um Determinado Tipo\n");
+        printf("6. Listar Todos os Prestadores de Serviço\n");
+        printf("7. Estado do Serviço Mais Caro\n");
+        printf("8. Listar Serviços em Ordem Crescente de Valor\n");
+        printf("9. Listar Clientes em Ordem Crescente de Nome\n");
         printf("0. Sair\n");
         printf("Escolha a opção: ");
         scanf("%d", &opcao);
@@ -193,6 +321,18 @@ int main() {
                     listarClientesEstado(estado);
 					}     
 				break;
+			case 5:
+				listarPrestadoresServicoTipo();
+				break;
+			case 6:
+                listarTodosPrestadoresServico();
+                break;
+            case 8:     
+				 listarServicosOrdemCrescenteValor();
+                break;
+            case 9:
+                listarClientesOrdemCrescenteNome();
+                break;
             case 0:
                 printf("Saindo do programa.\n");
                 break;
