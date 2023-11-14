@@ -8,9 +8,12 @@
 #define MAX_MUSICAS 50
 
 typedef struct {
-    int id;
-    char nome[50];
-    char estado[3];
+    char nome[100];
+    int idade;
+    char email[100];
+    char telefone[20];
+    char endereco[200];
+    char UF[3];
 } Cliente;
 
 typedef struct {
@@ -53,17 +56,48 @@ int i;
 }
 
 void cadastrarCliente() {
-    printf("Cadastro de Cliente:\n");
-    printf("Nome: ");
-    scanf("%s", clientes[numClientes].nome);
-    printf("Estado: ");
-    scanf("%s", clientes[numClientes].estado);
-    clientes[numClientes].id = numClientes + 1;
-    numClientes++;
-    printf("Cliente cadastrado com sucesso!\n");
+    system("cls");
+		
+    if (numClientes < MAX_CLIENTES) {
+        printf("Adicionar novo cliente:\n");
+        printf("Nome: ");
+        scanf("%s", clientes[numClientes].nome);
+        printf("Idade: ");
+        scanf("%d", &clientes[numClientes].idade);
+        printf("Email: ");
+        scanf("%s", clientes[numClientes].email);
+        printf("Telefone: ");
+        scanf("%s", clientes[numClientes].telefone);
+        printf("Endereço: ");
+        getchar(); // Limpa o buffer do teclado
+        fgets(clientes[numClientes].endereco, sizeof(clientes[numClientes].endereco), stdin);
+        printf("UF: ");
+        scanf("%s", clientes[numClientes].UF);
+        numClientes++;
+    } else {
+        printf("Limite máximo de clientes atingido.\n");
+    }
+    system("cls");
+}
+
+void listarClientesEstado(char estado[]) {
+	
+	
+	int i;
+	
+    printf("Clientes no Estado %s:\n", estado);
+    // Adicione aqui a lógica para listar clientes de um determinado estado
+    // Exemplo:
+    for (i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].UF, estado) == 0) {
+            printf("Nome: %s, Idade: %d, Email: %s, Telefone: %s, Endereço: %s, UF: %s\n", clientes[i].nome, clientes[i].idade, clientes[i].email, clientes[i].telefone, clientes[i].endereco, clientes[i].UF);
+        }
+    }
+    
 }
 
 void realizarPedido(int cliente_id) {
+	
     if (cliente_id < 0) {
         printf("Cliente não encontrado. Faça o cadastro primeiro.\n");
         return;
@@ -118,12 +152,15 @@ int main() {
         printf("1. Fazer Pedido\n");
         printf("2. Cadastrar Cliente\n");
         printf("3. Cadastrar Prestador de Serviço\n");
+        printf("4. Listar os clientes de um determinado estado\n");
         printf("0. Sair\n");
         printf("Escolha a opção: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
             case 1:
+            	system("cls");
+            	
                 printf("Informe seu nome: ");
                 scanf("%s", nomeCliente);
                 int indiceCliente = verificarClienteExistente(nomeCliente);
@@ -146,6 +183,16 @@ int main() {
             case 3:
                 cadastrarPrestadorServico();
                 break;
+            case 4:
+				{
+					system("cls");
+					
+                   	char estado[3];
+                    printf("Digite o estado: ");
+                    scanf("%s", estado);
+                    listarClientesEstado(estado);
+					}     
+				break;
             case 0:
                 printf("Saindo do programa.\n");
                 break;
