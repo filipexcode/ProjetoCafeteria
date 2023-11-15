@@ -1,12 +1,11 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #define MAX_CLIENTES 100
 #define MAX_PRODUTOS 50
 #define MAX_PEDIDOS 100
-#define MAX_MUSICAS 50
 #define MAX_SERVICOS 50
 
 typedef struct {
@@ -32,11 +31,6 @@ typedef struct {
 } Pedido;
 
 typedef struct {
-    char titulo[50];
-    char artista[50];
-} Musica;
-
-typedef struct {
     int id;
     char tipo[50];
     float valor;
@@ -45,13 +39,11 @@ typedef struct {
 Cliente clientes[MAX_CLIENTES];
 Produto produtos[MAX_PRODUTOS];
 Pedido pedidos[MAX_PEDIDOS];
-Musica musicas[MAX_MUSICAS];
 Servico servicos[MAX_SERVICOS];
 
 int numClientes = 0;
 int numProdutos = 0;
 int numPedidos = 0;
-int numMusicas = 0;
 int numServicos = 0;
 
 // Funções de cadastro
@@ -96,8 +88,7 @@ void listarClientesEstado(char estado[]) {
 	int i;
 	
     printf("Clientes no Estado %s:\n", estado);
-    // Adicione aqui a lógica para listar clientes de um determinado estado
-    // Exemplo:
+    
     for (i = 0; i < numClientes; i++) {
         if (strcmp(clientes[i].UF, estado) == 0) {
             printf("Nome: %s, Idade: %d, Email: %s, Telefone: %s, Endereço: %s, UF: %s\n", clientes[i].nome, clientes[i].idade, clientes[i].email, clientes[i].telefone, clientes[i].endereco, clientes[i].UF);
@@ -208,6 +199,7 @@ void listarTodosPrestadoresServico() {
 }
 
 void listarServicosOrdemCrescenteValor() {
+	system("cls");
 	int i,j;
 	
     if (numServicos == 0) {
@@ -268,6 +260,8 @@ void listarClientesOrdemCrescenteNome() {
 
 
 int main() {
+	setlocale(LC_ALL, "");
+	
     int opcao;
     char nomeCliente[50];
     do {
@@ -278,9 +272,8 @@ int main() {
         printf("4. Listar os Clientes de um Determinado Estado\n");
         printf("5. Listar os Prestadores de Serviço de um Determinado Tipo\n");
         printf("6. Listar Todos os Prestadores de Serviço\n");
-        printf("7. Estado do Serviço Mais Caro\n");
-        printf("8. Listar Serviços em Ordem Crescente de Valor\n");
-        printf("9. Listar Clientes em Ordem Crescente de Nome\n");
+        printf("7. Listar Serviços em Ordem Crescente de Valor\n");
+        printf("8. Listar Clientes em Ordem Crescente de Nome\n");
         printf("0. Sair\n");
         printf("Escolha a opção: ");
         scanf("%d", &opcao);
@@ -327,10 +320,10 @@ int main() {
 			case 6:
                 listarTodosPrestadoresServico();
                 break;
-            case 8:     
+            case 7:     
 				 listarServicosOrdemCrescenteValor();
                 break;
-            case 9:
+            case 8:
                 listarClientesOrdemCrescenteNome();
                 break;
             case 0:
