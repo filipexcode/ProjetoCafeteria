@@ -314,4 +314,35 @@ int main() {
             case 3:
                 cadastrarPrestadorServico();
                 break;
-            case 
+            case 4:
+		{
+		system("cls");
+					
+		char estado[3];
+	    	printf("Digite o estado: ");
+	    	scanf("%s", estado);
+	    	listarClientesEstado(estado);
+				}     
+		break;
+	    case 5:
+		listarPrestadoresServicoTipo();
+		break;
+	    case 6:
+                listarTodosPrestadoresServico();
+                break;
+            case 7:     
+		listarServicosOrdemCrescenteValor();
+                break;
+            case 8:
+                listarClientesOrdemCrescenteNome();
+                break;
+            case 0:
+                printf("Saindo do programa.\n");
+                break;
+            default:
+                printf("Opção inválida. Tente novamente.\n");
+        }
+    } while (opcao != 0);
+
+    return 0;
+} 
